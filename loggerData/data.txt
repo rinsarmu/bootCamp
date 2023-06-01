@@ -1,0 +1,5 @@
+Incoming request from ::1 to http://localhost/ at 2:49:16 PMIncoming request from ::1 to http://localhost/ at 2:50:07 PM 
+Incoming request from ::1 to http://localhost/ at 2:50:27 PM 
+Incoming request from ::1 to http://localhost/api/v1/bootcamps/3837 at 2:50:54 PM 
+Incoming request from ::1 to http://localhost/api/v1/bootcamps/3837 at 2:58:50 PM 
+Incoming request from ::1 to http://localhost/api/v1/bootcamps/3837 at 3:00:15 PM 
