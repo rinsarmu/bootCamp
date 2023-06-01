@@ -1,3 +1,6 @@
+//@desc     Get all Boot camps
+//route     GET /api/v1/bootcamps
+//access    Public
 const getBootCamps = (req, res, next) => {
   res.json({
     success: true,
@@ -5,6 +8,9 @@ const getBootCamps = (req, res, next) => {
   });
 };
 
+//@desc     Create New Boot camps
+//route     POST /api/v1/bootcamps
+//access    Private
 const createBootCamps = (req, res, next) => {
   res.json({
     success: true,
@@ -12,6 +18,9 @@ const createBootCamps = (req, res, next) => {
   });
 };
 
+//@desc     Get Single Boot camps
+//route     GET /api/v1/bootcamps/:id
+//access    Private
 const getBootCamp = (req, res, next) => {
   res.json({
     success: true,
@@ -19,6 +28,9 @@ const getBootCamp = (req, res, next) => {
   });
 };
 
+//@desc     update Single Boot camps
+//route     PATCH /api/v1/bootcamps/:id
+//access    Private
 const updateBootCamp = (req, res, next) => {
   res.json({
     success: true,
@@ -26,6 +38,9 @@ const updateBootCamp = (req, res, next) => {
   });
 };
 
+//@desc     Delete Single Boot camps
+//route     DELETE /api/v1/bootcamps/:id
+//access    Private
 const deleteBootCamp = (req, res, next) => {
   res.json({
     success: true,
