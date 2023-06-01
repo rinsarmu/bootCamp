@@ -2,7 +2,6 @@
   "name": "mern-bootcamp",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=production node server",
@@ -15,6 +14,7 @@
     "dotenv": "^16.1.2",
     "express": "^4.18.2",
     "express-ip": "^1.0.4",
+    "mongoose": "^7.2.2",
     "morgan": "^1.10.0"
   },
   "devDependencies": {

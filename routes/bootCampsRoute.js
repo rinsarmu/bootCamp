@@ -1,11 +1,11 @@
-import express from "express";
-import {
+const express = require("express");
+const {
   getBootCamps,
   createBootCamps,
   getBootCamp,
   updateBootCamp,
   deleteBootCamp,
-} from "../controllers/bootCampsController.js";
+} = require("../controllers/bootCampsController.js");
 
 const router = express.Router();
 router.route("/").get(getBootCamps).post(createBootCamps);
@@ -16,4 +16,4 @@ router
   .patch(updateBootCamp)
   .delete(deleteBootCamp);
 
-export default router;
+module.exports = router;

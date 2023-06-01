@@ -8,7 +8,6 @@ const getBootCamps = (req, res, next) => {
   });
 };
 
-
 //@desc     Create New Boot camps
 //route     POST /api/v1/bootcamps
 //access    Private
@@ -49,7 +48,7 @@ const deleteBootCamp = (req, res, next) => {
   });
 };
 
-export {
+module.exports = {
   getBootCamps,
   createBootCamps,
   getBootCamp,
