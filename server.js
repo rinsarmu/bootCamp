@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 //2.Custom modules
 //2.1 Routes
-import router from "./routes/bootCamps.js";
+import router from "./routes/bootCampsRoute.js";
 
 //loading dotenv
 dotenv.config({ path: "./config/config.env" });
