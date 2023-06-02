@@ -12,6 +12,7 @@ const connectDb = async () => {
     });
     console.log(
       `mongooose is connected ${conn.connection.host} ${conn.connection.db}`
+        .cyan.italic
     );
   } catch (err) {
     console.error(err);
