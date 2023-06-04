@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const slugify = require("slugify");
 
 const bootCampSchema = new mongoose.Schema({
   name: {
@@ -35,6 +36,23 @@ const bootCampSchema = new mongoose.Schema({
   address: {
     type: String,
     required: [true, "Please add a address"],
+  },
+  location: {
+    //GEOJSON point
+    type: {
+      type: String,
+      enum: ["Point"],
+    },
+    coordinate: {
+      type: [Number],
+      index: "2dsphere",
+    },
+    formattedAddress: String,
+    street: String,
+    city: String,
+    state: String,
+    zipcode: String,
+    country: String,
   },
 
   careers: {
@@ -81,28 +99,17 @@ const bootCampSchema = new mongoose.Schema({
   },
 });
 
+bootCampSchema.pre("save", function (next) {
+  console.log("slugify run", slugify(this.name));
+  this.slug = slugify(this.name);
+  console.log("Slug : ", this.slug);
+  next();
+});
+
 const BootCamp = mongoose.model("BootCamp", bootCampSchema);
 
 module.exports = BootCamp;
 
 /*
-location: {
-    //GEOJSON point
-    type: {
-      type: String,
-      enum: ["Point"],
-      required: true,
-    },
-    coordinate: {
-      type: [Number],
-      required: true,
-      index: "2dsphere",
-    },
-    formattedAddress: String,
-    street: String,
-    city: String,
-    state: String,
-    zipcode: String,
-    country: String,
-  },
+
 */

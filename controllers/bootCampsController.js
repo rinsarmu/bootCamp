@@ -1,11 +1,11 @@
-const asyncHandler = require("express-async-handler");
 const BootCamp = require("../model/Bootcamp");
 const ErrorResponse = require("../utils/errorResponse");
+const catchAsync = require("../utils/catchAsync");
 
 //@desc     Get all Boot camps
 //route     GET /api/v1/bootcamps
 //access    Public
-const getBootCamps = asyncHandler(async (req, res, next) => {
+const getBootCamps = catchAsync(async (req, res, next) => {
   const bootCamps = await BootCamp.find();
   res.json({
     success: true,
@@ -18,7 +18,7 @@ const getBootCamps = asyncHandler(async (req, res, next) => {
 //@desc     Create New Boot camps
 //route     POST /api/v1/bootcamps
 //access    Private
-const createBootCamps = asyncHandler(async (req, res, next) => {
+const createBootCamps = catchAsync(async (req, res, next) => {
   const bootCamp = await BootCamp.create(req.body);
   console.log("body", req.body);
 
@@ -58,7 +58,7 @@ const getBootCamp = async (req, res, next) => {
 //@desc     update Single Boot camps
 //route     PATCH /api/v1/bootcamps/:id
 //access    Private
-const updateBootCamp = asyncHandler(async (req, res, next) => {
+const updateBootCamp = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   try {
     const bootCamp = await BootCamp.findByIdAndUpdate(id, req.body, {
@@ -83,7 +83,7 @@ const updateBootCamp = asyncHandler(async (req, res, next) => {
 //@desc     Delete Single Boot camps
 //route     DELETE /api/v1/bootcamps/:id
 //access    Private
-const deleteBootCamp = asyncHandler(async (req, res, next) => {
+const deleteBootCamp = catchAsync(async (req, res, next) => {
   try {
     const { id } = req.params;
     const data = await BootCamp.findByIdAndDelete(id);
