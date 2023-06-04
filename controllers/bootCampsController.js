@@ -35,19 +35,25 @@ const createBootCamps = asyncHandler(async (req, res, next) => {
 //@desc     Get Single Boot camps
 //route     GET /api/v1/bootcamps/:id
 //access    Private
-const getBootCamp = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  const bootCamp = await BootCamp.findById(id);
+const getBootCamp = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const bootCamp = await BootCamp.findById(id);
 
-  if (!bootCamp) {
-    return next(new ErrorResponse(`User is not found with ${id} ID`, 400));
+    if (!bootCamp) {
+      return next(
+        new ErrorResponse(`Resource is not found  with ${id} ID`, 400)
+      );
+    }
+    res.json({
+      success: true,
+      message: `Get boot camp on ${req.params.id} `,
+      data: bootCamp,
+    });
+  } catch (err) {
+    next(err);
   }
-  res.json({
-    success: true,
-    message: `Get boot camp on ${req.params.id} `,
-    data: bootCamp,
-  });
-});
+};
 
 //@desc     update Single Boot camps
 //route     PATCH /api/v1/bootcamps/:id
@@ -60,7 +66,9 @@ const updateBootCamp = asyncHandler(async (req, res, next) => {
       runValidators: true,
     });
     if (!bootCamp) {
-      return next(new ErrorResponse(`User is not found with ${id} ID`, 400));
+      return next(
+        new ErrorResponse(`Resource is not found with ${id} ID`, 400)
+      );
     }
 
     res.status(200).json({
@@ -68,7 +76,7 @@ const updateBootCamp = asyncHandler(async (req, res, next) => {
       data: bootCamp,
     });
   } catch (err) {
-    return next(new ErrorResponse(`User is not found with ${id} ID`, 400));
+    next(err);
   }
 });
 
@@ -81,7 +89,7 @@ const deleteBootCamp = asyncHandler(async (req, res, next) => {
     const data = await BootCamp.findByIdAndDelete(id);
     if (!data) {
       return next(
-        new ErrorResponse(`User is not found with ${id} ID to delete`, 400)
+        new ErrorResponse(`Resource is not found with ${id} ID to delete`, 400)
       );
     }
     res.json({
@@ -89,9 +97,7 @@ const deleteBootCamp = asyncHandler(async (req, res, next) => {
       message: `Delete boot camp on ${req.params.id} `,
     });
   } catch (err) {
-    return next(
-      new ErrorResponse(`User is not found with ${id} ID to delete`, 400)
-    );
+    next(err);
   }
 });
 
