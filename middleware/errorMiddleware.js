@@ -6,17 +6,29 @@ const errorMiddleware = (err, req, res, next) => {
   // console.log("name:", err);
 
   error.message = err.message;
-  console.log(err);
+  console.log("Name", err.name);
+
+  //Mongoose bad Object ID
   if (err.name === "CastError") {
     const message = `Resource is not found  with this ${err.value} ID`;
     error = new ErrorResponse(message, 400);
-    error = receiveMessage(message, 400);
+    error = receiveMessage(message, 404);
     error.status = "error";
     error.isOperational = err.isOperational || true;
   }
 
+  //Mongoose Duplicate Entry
   if (err.code === 11000) {
     const message = `Duplicating resource is not applicable.`;
+    error = new ErrorResponse(message, 400);
+    error.status = "error";
+    error.isOperational = err.isOperational || false;
+  }
+
+  //Mongoose Validation Error
+  console.log(err);
+  if (err.name === "ValidationError") {
+    const message = Object.values(err.errors).map((val) => val.message);
     error = new ErrorResponse(message, 400);
     error.status = "error";
     error.isOperational = err.isOperational || false;
