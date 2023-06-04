@@ -1,13 +1,16 @@
-const asynHandler = require("express-async-handler");
+const asyncHandler = require("express-async-handler");
 const BootCamp = require("../model/Bootcamp");
+const ErrorResponse = require("../utils/errorResponse");
+
 //@desc     Get all Boot camps
 //route     GET /api/v1/bootcamps
 //access    Public
-const getBootCamps = asynHandler(async (req, res, next) => {
+const getBootCamps = asyncHandler(async (req, res, next) => {
   const bootCamps = await BootCamp.find();
   res.json({
     success: true,
     message: "All boot camp ",
+    count: bootCamps.length,
     data: bootCamps,
   });
 });
@@ -15,30 +18,30 @@ const getBootCamps = asynHandler(async (req, res, next) => {
 //@desc     Create New Boot camps
 //route     POST /api/v1/bootcamps
 //access    Private
-const createBootCamps = async (req, res, next) => {
-  try {
-    const bootCamp = await BootCamp.create(req.body);
-    console.log("body", req.body);
-    res.json({
-      success: true,
-      message: "Boot camp is created",
-      data: bootCamp,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(400).json({
-      success: false,
-      error: err?.data?.message || err.error,
-    });
+const createBootCamps = asyncHandler(async (req, res, next) => {
+  const bootCamp = await BootCamp.create(req.body);
+  console.log("body", req.body);
+
+  if (!bootCamp) {
+    return next(new ErrorResponse("Error in creating", 400));
   }
-};
+  res.json({
+    success: true,
+    message: "Boot camp is created",
+    data: bootCamp,
+  });
+});
 
 //@desc     Get Single Boot camps
 //route     GET /api/v1/bootcamps/:id
 //access    Private
-const getBootCamp = asynHandler(async (req, res, next) => {
+const getBootCamp = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const bootCamp = await BootCamp.findById(id);
+
+  if (!bootCamp) {
+    return next(new ErrorResponse(`User is not found with ${id} ID`, 400));
+  }
   res.json({
     success: true,
     message: `Get boot camp on ${req.params.id} `,
@@ -49,22 +52,48 @@ const getBootCamp = asynHandler(async (req, res, next) => {
 //@desc     update Single Boot camps
 //route     PATCH /api/v1/bootcamps/:id
 //access    Private
-const updateBootCamp = (req, res, next) => {
-  res.json({
-    success: true,
-    message: `Update boot camp on ${req.params.id} `,
-  });
-};
+const updateBootCamp = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const bootCamp = await BootCamp.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!bootCamp) {
+      return next(new ErrorResponse(`User is not found with ${id} ID`, 400));
+    }
+
+    res.status(200).json({
+      success: true,
+      data: bootCamp,
+    });
+  } catch (err) {
+    return next(new ErrorResponse(`User is not found with ${id} ID`, 400));
+  }
+});
 
 //@desc     Delete Single Boot camps
 //route     DELETE /api/v1/bootcamps/:id
 //access    Private
-const deleteBootCamp = (req, res, next) => {
-  res.json({
-    success: true,
-    message: `Delete boot camp on ${req.params.id} `,
-  });
-};
+const deleteBootCamp = asyncHandler(async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const data = await BootCamp.findByIdAndDelete(id);
+    if (!data) {
+      return next(
+        new ErrorResponse(`User is not found with ${id} ID to delete`, 400)
+      );
+    }
+    res.json({
+      success: true,
+      message: `Delete boot camp on ${req.params.id} `,
+    });
+  } catch (err) {
+    return next(
+      new ErrorResponse(`User is not found with ${id} ID to delete`, 400)
+    );
+  }
+});
 
 module.exports = {
   getBootCamps,

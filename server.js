@@ -11,6 +11,7 @@ console.log("PORT IN SERVER JS :", process.env.PORT); // 0utput 5000
 //2.1 Routes
 const router = require("./routes/bootCampsRoute.js");
 const notFound = require("./middleware/notFound.js");
+const errorMiddleware = require("./middleware/errorMiddleware.js");
 
 // 2.2 Middleware
 // import { logger } from "./middleware/logger.js";
@@ -34,12 +35,10 @@ app.use(morgan("dev"));
 app.use("/api/v1/bootcamps", router);
 
 //Body parsing
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 //Error Handling
-// app.use("/*", notFound);
-// app.use()
+app.use("/*", notFound);
+app.use(errorMiddleware);
 
 const server = app.listen(
   PORT,
