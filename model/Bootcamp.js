@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
+const geocoder = require("../utils/geocode");
 
 const bootCampSchema = new mongoose.Schema({
   name: {
@@ -103,6 +104,26 @@ bootCampSchema.pre("save", function (next) {
   console.log("slugify run", slugify(this.name));
   this.slug = slugify(this.name);
   console.log("Slug : ", this.slug);
+  next();
+});
+
+//Geocode && create location field
+bootCampSchema.pre("save", async function (next) {
+  const loc = await geocoder.geocode(this.address);
+  this.location = {
+    type: "point",
+    coordinate: [loc[0].longitude, loc[0].latitude],
+    formattedAddress: loc[0].formattedAddress,
+    street: loc[0].streetName,
+    city: loc[0].city,
+    state: loc[0].stateCode,
+    zipcode: loc[0].zipcode,
+
+    country: loc[0].country,
+  };
+
+  //I don't want to save address in to the db
+  this.address = undefined;
   next();
 });
 
